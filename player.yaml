@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: alphago-player
+spec:
+  parallelism: 5
+  template:
+    metadata:
+      name: player
+    spec:
+      containers:
+      - name: player
+        image: gcr.io/beacham-gke-dev/alphago-player:0.1
+        args:
+        - beacham-alphago-data
+        volumeMounts:
+        - name: service-credentials
+          mountPath: /etc/credentials
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/credentials/service-account.json
+        securityContext:
+          privileged: true
+      volumes:
+      - name: service-credentials
+        secret:
+          secretName: alphago-creds
+      restartPolicy: OnFailure

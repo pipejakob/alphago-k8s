@@ -1,0 +1,5 @@
+PROJECT=beacham-gke-dev
+CLUSTER_NAME=alphago
+BUCKET_NAME=beacham-alphago-data
+SERVICE_ACCOUNT=alphago
+SERVICE_ACCOUNT_EMAIL=${SERVICE_ACCOUNT}@${PROJECT}.iam.gserviceaccount.com

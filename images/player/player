@@ -1,0 +1,24 @@
+#!/bin/sh
+
+BUCKET=$1
+DATA_DIR=/gcs
+
+mkdir $DATA_DIR
+gcsfuse --implicit-dirs --key-file $GOOGLE_APPLICATION_CREDENTIALS $BUCKET $DATA_DIR
+
+echo Using bucket $BUCKET
+
+while true; do
+  echo Finding newest model...
+  MODEL=$(ls $DATA_DIR/models | tail -n1)
+
+  echo Using newest model $MODEL...
+  echo Pretending to play a game using model $MODEL...
+  sleep 30
+
+  GAME_ID=$(date "+%Y-%m-%d_%H-%M-%S")-$(uuidgen)
+  OUT_DIR=$DATA_DIR/games/$GAME_ID
+  mkdir -p $OUT_DIR
+  echo fake game data > $OUT_DIR/game_data
+  echo Wrote out game results to $OUT_DIR
+done

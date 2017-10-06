@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: alphago-trainer
+spec:
+  template:
+    metadata:
+      name: trainer
+    spec:
+      containers:
+      - name: trainer
+        image: gcr.io/beacham-gke-dev/alphago-trainer:0.1
+        args:
+        - beacham-alphago-data
+        volumeMounts:
+        - name: service-credentials
+          mountPath: /etc/credentials
+        env:
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /etc/credentials/service-account.json
+        securityContext:
+          privileged: true
+      volumes:
+      - name: service-credentials
+        secret:
+          secretName: alphago-creds
+      restartPolicy: OnFailure

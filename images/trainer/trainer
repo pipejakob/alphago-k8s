@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+BUCKET=$1
+DATA_DIR=/gcs
+
+mkdir $DATA_DIR
+gcsfuse --implicit-dirs --key-file $GOOGLE_APPLICATION_CREDENTIALS $BUCKET $DATA_DIR
+
+echo Using bucket $BUCKET
+
+while true; do
+  echo Pretending to train new model...
+  echo Look at all of the saved game data I am using:
+  ls /gcs/games/
+
+  sleep 60
+
+  MODEL_ID=$(date "+%Y-%m-%d_%H-%M-%S")
+  OUT_DIR=$DATA_DIR/models/$MODEL_ID
+  mkdir -p $OUT_DIR
+  echo fake data > $OUT_DIR/model_data
+  echo Wrote out new model to $OUT_DIR
+done
